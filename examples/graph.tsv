@@ -1,0 +1,6 @@
+mouse_MBL1	human_MBL2	412
+human_MBL2	mouse_MBL2	572
+mouse_MBL2	human_MBL2	597
+rat_MBL1	human_MBL2	380
+mouse_MBL1	rat_MBL1	770
+mouse_MBL2	rat_MBL2	918
