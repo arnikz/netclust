@@ -13,6 +13,6 @@ make clean  # remove binaries
 ```
 
 ```
-netindex ../examples/graph.tsv          # index graph
+netindex ../examples/graph.tsv          # index the input (weighted) graph
 netclust ../examples/graph.tsv O1 S 500 # detect clusters in the graph
 ```
