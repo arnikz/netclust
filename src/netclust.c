@@ -398,7 +398,7 @@ NclsWriteLogFile(NCLS_IO_SET *pt_ioset)
 	else
 		fprintf(fp, " WeightType\t\tDistance\n");
 
-	fprintf(fp, " WeightCutoff\t\t%f\n", pt_ioset->weight_cutoff);
+	fprintf(fp, " WeightCutoff\t\t%.2f\n", pt_ioset->weight_cutoff);
 	fprintf(fp, " NumNodes\t\t%d\n", pt_ioset->n_nodes);
 	fprintf(fp, " NumEdges\t\t%d\n", pt_ioset->n_edges);
 	fprintf(fp, " NumClusters\t\t%d\n\n", pt_ioset->n_clusters);

@@ -61,7 +61,7 @@ NidxWriteLogFile(NIDX_IO_SET *pt_ioset)
 	fprintf(fp, "*************\n");
 	fprintf(fp, " InputFile          %s\n", pt_ioset->infile);
 	fprintf(fp, " WeightType         %s\n", str_weight_type);
-	fprintf(fp, " WeightCutoff       %f\n", pt_ioset->weight_cutoff);
+	fprintf(fp, " WeightCutoff       %.2f\n", pt_ioset->weight_cutoff);
 	fprintf(fp, " NumNodes           %d\n", pt_ioset->n_nodes);
 	fprintf(fp, " NumEdges           %d\n", pt_ioset->n_edges);
 	fprintf(fp, " NumEdgesPassed     %d\n", pt_ioset->n_edges_passed);
