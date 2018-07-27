@@ -117,66 +117,60 @@ NidxStoreIOset(int argc, char **args)
 	return ioset;
 }
 
-/* write a header of the indexed edge file */
+/* write initial value into the header of edge index file */
 void 
-WriteFileEidxHeader(FILE *fp, char *file_name)
+InitFileEidxHeader(FILE *fp, char *file_name)
 {
-	unsigned int num_edges = 0;
+	unsigned int n_edges = 0;
 
-	/* reserve 4 bytes for total number of edges */
-	FWRITE(fp, file_name, &num_edges, sizeof(unsigned int));
+	FWRITE(fp, file_name, &n_edges, sizeof(unsigned int));
 }
 
-/* update header of the indexed edge file */
+/* update the header of edge index file */
 void 
-UpdateFileEidxHeader(FILE *fp, char *file_name, unsigned int num_edges)
+UpdateFileEidxHeader(FILE *fp, char *file_name, unsigned int n_edges)
 {
-	/* rewind file position indicator */
 	rewind(fp);
 
-	/* write total number of nodes into header */
-	FWRITE(fp, file_name, &num_edges, sizeof(int));
+	/* write the total number of edges */
+	FWRITE(fp, file_name, &n_edges, sizeof(unsigned int));
 }
 
-/* write node index file - header */
+/* write initial values into the header of node index file */
 void 
-WriteFileNidxHeader(FILE *fp, char *file_name, unsigned int node_buffer_size)
+InitFileNidxHeader(FILE *fp, char *file_name)
 {
-	unsigned int	node_idx = 0;
+	unsigned int n_nodes = NODE_IDX;
+	unsigned int buf = NODE_BUF;
 
-	/* reserve 4 bytes for total number of nodes */
-	FWRITE(fp, file_name, &node_idx, sizeof(int));
-
-	/* write size of the node buffer (4 bytes) */
-	FWRITE(fp, file_name, &node_buffer_size, sizeof(int));
+	FWRITE(fp, file_name, &n_nodes, sizeof(unsigned int));
+	FWRITE(fp, file_name, &buf, sizeof(unsigned int));
 }
 
-/* write node index file - array of node labels */
+/* write node labels into node index file */
 void 
 WriteFileNidx(FILE *fp, char *file_name, EDGE *pt_edge, HASH_TABLE *pt_table,
 	            unsigned int *pt_node_idx)
 {
-	/* write node label A & increase the node index */
 	if (AddNewKVPToHash(pt_table, pt_edge->nodeA, *pt_node_idx) != NULL) {
 		FWRITE(fp, file_name, pt_edge->nodeA, sizeof(char) * NODE_BUF);
 		*pt_node_idx += 1;
 	}
-	/* write node label A & increase the node index */
+
 	if (AddNewKVPToHash(pt_table, pt_edge->nodeB, *pt_node_idx) != NULL) {
 		FWRITE(fp, file_name, pt_edge->nodeB, sizeof(char) * NODE_BUF);
 		*pt_node_idx += 1;
 	}
 }
 
-/* update header of the node index file */
+/* update the header of node index file */
 void 
 UpdateFileNidxHeader(FILE *fp, char *file_name, unsigned int n_nodes)
 {
-	/* rewind file position indicator */
 	rewind(fp);
 
-	/* write total number of nodes into header */
-	FWRITE(fp, file_name, &n_nodes, sizeof(int));
+	/* write the total number of nodes */
+	FWRITE(fp, file_name, &n_nodes, sizeof(unsigned int));
 }
 
 /* create a new hash table */
@@ -298,18 +292,12 @@ IndexGraph(NIDX_IO_SET *pt_ioset)
 	FOPEN(fp_outfile_eidx, pt_ioset->outfile_eidx, "wb");
 	FOPEN(fp_outfile_sube, pt_ioset->outfile_sube, "wb");
 
-	/* write header into node index file */
-	WriteFileNidxHeader(fp_outfile_nidx, pt_ioset->outfile_nidx, NODE_BUF);
+	/* write initial values into headers of index files */
+	InitFileNidxHeader(fp_outfile_nidx, pt_ioset->outfile_nidx);
+	InitFileEidxHeader(fp_outfile_eidx, pt_ioset->outfile_eidx);
 
-	/* write header into edge index file */
-	WriteFileEidxHeader(fp_outfile_eidx, pt_ioset->outfile_eidx);
-
-	/*
-	 * read input file - To-do: put this block into a function to reduce
-	 * overhead
-	 */
+	/* read input graph file */
 	while (fgets(line, LINE_BUF, fp_infile) != NULL) {
-		/* parse input file with two or three columns */
 		if (sscanf(line, "%s %s %f\n", nodeA, nodeB, &weight) == 3) {
 			n_edges++;
 
@@ -317,8 +305,7 @@ IndexGraph(NIDX_IO_SET *pt_ioset)
 			if (pt_ioset->weight_type) {	/* if distance values */
 				if (weight > 1 || weight < 0) {
 					fputs
-						("Input error: Edge weighes (distances) out of range.\n",
-						 stderr);
+						("Input error: Edge weighes (distances) out of range.\n", stderr);
 					remove(pt_ioset->outfile_nidx);
 					remove(pt_ioset->outfile_eidx);
 					remove(pt_ioset->outfile_sube);

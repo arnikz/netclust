@@ -37,11 +37,11 @@ struct _hash_table_ {
 /* function prototypes */
 extern void	NidxUsage();
 extern NIDX_IO_SET NidxStoreIOset(int, char **);
-extern void	WriteFileNidxHeader(FILE *, char *, unsigned int);
-extern void WriteFileNidx(FILE *, char *, EDGE *, HASH_TABLE *, unsigned int *);
+extern void	InitFileNidxHeader(FILE *, char *);
+extern void	InitFileEidxHeader(FILE *, char *);
 extern void	UpdateFileNidxHeader(FILE *, char *, unsigned int);
-extern void	WriteFileEidxHeader(FILE *, char *);
 extern void	UpdateFileEidxHeader(FILE *, char *, unsigned int);
+extern void WriteFileNidx(FILE *, char *, EDGE *, HASH_TABLE *, unsigned int *);
 extern HASH_TABLE *NewHashTable(unsigned int);
 extern unsigned int *GetHashValue(HASH_TABLE *, char *);
 extern char *AddNewKVPToHash(HASH_TABLE *, char *, unsigned int);
