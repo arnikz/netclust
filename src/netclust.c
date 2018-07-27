@@ -331,9 +331,9 @@ OutputGraphPartition(PARTITION *par, NCLS_IO_SET *pt_ioset)
 		if (sz < 2)
 			continue;	/* skipp singletons */
 		if (mode == 2)
-			printf("%d\t%d\t", i + 1, sz);
+			printf("%u\t%u\t", i + 1, sz);
 		else if (mode == 4)
-			fprintf(fp, "%d\t%d\t", i + 1, sz);
+			fprintf(fp, "%u\t%u\t", i + 1, sz);
 
 		n_nodes += sz;
 		n_clusters++;
@@ -341,13 +341,13 @@ OutputGraphPartition(PARTITION *par, NCLS_IO_SET *pt_ioset)
 		for (j = 0; j < sz; j++) {
 			switch (mode) {
 			case 1:
-				printf("%d\t%s\n", i + 1, cls[i].member[j]);
+				printf("%u\t%s\n", i + 1, cls[i].member[j]);
 				break;
 			case 2:
 				printf("%s ", cls[i].member[j]);
 				break;
 			case 3:
-				fprintf(fp, "%d\t%s\n", i + 1, cls[i].member[j]);
+				fprintf(fp, "%u\t%s\n", i + 1, cls[i].member[j]);
 				break;
 			case 4:
 				fprintf(fp, "%s ", cls[i].member[j]);
@@ -399,9 +399,9 @@ NclsWriteLogFile(NCLS_IO_SET *pt_ioset)
 		fprintf(fp, " WeightType\t\tDistance\n");
 
 	fprintf(fp, " WeightCutoff\t\t%.2f\n", pt_ioset->weight_cutoff);
-	fprintf(fp, " NumNodes\t\t%d\n", pt_ioset->n_nodes);
-	fprintf(fp, " NumEdges\t\t%d\n", pt_ioset->n_edges);
-	fprintf(fp, " NumClusters\t\t%d\n\n", pt_ioset->n_clusters);
+	fprintf(fp, " NumNodes\t\t%u\n", pt_ioset->n_nodes);
+	fprintf(fp, " NumEdges\t\t%u\n", pt_ioset->n_edges);
+	fprintf(fp, " NumClusters\t\t%u\n\n", pt_ioset->n_clusters);
 
 	/* close log file */
 	FCLOSE(fp, pt_ioset->outfile_log);
